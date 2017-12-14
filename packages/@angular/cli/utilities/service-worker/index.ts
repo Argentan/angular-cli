@@ -84,8 +84,9 @@ export function augmentAppWithServiceWorker(projectRoot: string, appRoot: string
     .then((output: Object) => {
       const manifest = JSON.stringify(output, null, 2);
       fs.writeFileSync(path.resolve(outputPath, 'ngsw.json'), manifest);
-      // Copy worker script to dist directory.
-      const workerCode = fs.readFileSync(workerPath);
-      fs.writeFileSync(path.resolve(outputPath, 'ngsw-worker.js'), workerCode);
+      // Copy worker script to dist directory and stamp it with built  time.
+      const date_str = `/* built on ${new Date().toISOString()} */\n`;
+      const workerCode = fs.readFileSync(workerPath); 
+      fs.writeFileSync(path.resolve(outputPath, 'ngsw-worker.js'), date_str + workerCode);
     });
 }
